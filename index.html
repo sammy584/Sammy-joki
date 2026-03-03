@@ -3,36 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PAYMENT PREMIUM</title>
+<title>SAMMY JOKI STORE</title>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{
 background:#000;
 color:#fff;
 overflow-x:hidden;
 }
 
-/* BACKGROUND ANIMASI */
+/* BACKGROUND */
 body::before{
 content:"";
 position:fixed;
 width:200%;
 height:200%;
 background:radial-gradient(circle,#00cfff22,#000 60%);
-animation:bgmove 10s linear infinite;
+animation:bg 15s linear infinite;
 z-index:-1;
 }
-
-@keyframes bgmove{
+@keyframes bg{
 0%{transform:translate(0,0);}
-50%{transform:translate(-200px,-200px);}
+50%{transform:translate(-300px,-300px);}
 100%{transform:translate(0,0);}
 }
 
@@ -40,39 +33,40 @@ z-index:-1;
 .logo{
 text-align:center;
 font-size:40px;
-font-weight:bold;
-margin-top:40px;
+margin:30px;
 color:#7ddfff;
-text-shadow:0 0 10px #00cfff,0 0 20px #00cfff;
-animation:glow 3s ease-in-out infinite alternate;
+text-shadow:0 0 20px #00cfff;
+animation:glow 3s infinite alternate;
 }
-
 @keyframes glow{
 from{text-shadow:0 0 10px #00cfff;}
 to{text-shadow:0 0 30px #00ffff;}
 }
 
-/* STATUS */
 .status{
 text-align:center;
-margin:20px;
-font-size:18px;
+margin-bottom:20px;
 }
-
 .online{color:#00ffcc;}
 .offline{color:red;}
 
-/* CARD */
 .card{
 background:#111;
-border:1px solid #00cfff;
 margin:20px;
 padding:20px;
 border-radius:15px;
-box-shadow:0 0 15px #00cfff55;
+border:1px solid #00cfff;
+box-shadow:0 0 20px #00cfff55;
 }
 
-/* BUTTON */
+select,input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+}
+
 button{
 width:100%;
 padding:12px;
@@ -83,15 +77,12 @@ background:#00cfff;
 color:#000;
 font-weight:bold;
 cursor:pointer;
-transition:0.3s;
 }
-
 button:hover{
 background:#00ffff;
 box-shadow:0 0 15px #00ffff;
 }
 
-/* LOADING */
 .loading{
 display:none;
 text-align:center;
@@ -101,26 +92,40 @@ margin-top:10px;
 .money{
 position:fixed;
 font-size:30px;
-animation:moneyFall 2s linear forwards;
+animation:fall 2s linear forwards;
 }
-
-@keyframes moneyFall{
+@keyframes fall{
 0%{top:-50px;opacity:1;}
 100%{top:100vh;opacity:0;}
-}
-
-.section{
-height:500px;
-padding:30px;
 }
 </style>
 </head>
 <body>
 
-<div class="logo">SAMMY PAYMENT</div>
+<div class="logo">SAMMY JOKI STORE</div>
 
 <div class="status">
 Status: <span id="status" class="online">ONLINE</span>
+</div>
+
+<div class="card">
+<h3>LIST JOKI BLOX FRUIT</h3>
+
+<label>Pilih Layanan</label>
+<select id="layanan">
+<option>Level Sea 1 (5k/100 LV)</option>
+<option>Level Sea 2 (4k/100 LV)</option>
+<option>Level Sea 3 (3k/100 LV)</option>
+<option>Belly Sea 1 (7k/1jt)</option>
+<option>Belly Sea 2 (6k/1jt)</option>
+<option>Belly Sea 3 (5k/1jt)</option>
+</select>
+
+<input type="text" id="user" placeholder="Username">
+<input type="text" id="pass" placeholder="Password">
+
+<button onclick="order()">ORDER SEKARANG</button>
+<div class="loading" id="loading">Mengirim ke WhatsApp...</div>
 </div>
 
 <div class="card">
@@ -129,53 +134,55 @@ Status: <span id="status" class="online">ONLINE</span>
 <p>GOPAY: 08984356112</p>
 <p>OVO: 08984356112</p>
 <p>QRIS: Minta Admin</p>
-<button onclick="kirimWA()">Minat? WhatsApp</button>
-<div class="loading" id="loading">Mengirim...</div>
+<button onclick="playSound()">Saya Sudah Bayar</button>
 </div>
-
-<div class="card">
-<button onclick="playSound()">Nyalakan Sound Batidao</button>
-</div>
-
-<div class="section"></div>
-<div class="section"></div>
-<div class="section"></div>
 
 <audio id="sound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
 <script>
-function kirimWA(){
+function order(){
+let layanan=document.getElementById("layanan").value;
+let user=document.getElementById("user").value;
+let pass=document.getElementById("pass").value;
+
+if(user==""||pass==""){
+alert("Isi Username dan Password dulu!");
+return;
+}
+
 document.getElementById("loading").style.display="block";
+
 setTimeout(function(){
-window.location.href="https://wa.me/6283107288718?text=Halo%20saya%20minat";
+window.location.href="https://wa.me/6283107288718?text=Halo%20Admin%0ALayanan:%20"+layanan+"%0AUsername:%20"+user+"%0APassword:%20"+pass;
 },2000);
 }
 
 function playSound(){
-let sound=document.getElementById("sound");
-sound.volume=1.0;
-sound.play();
+let s=document.getElementById("sound");
+s.volume=1.0;
+s.play();
 alert("Pembayaran Berhasil!");
-for(let i=0;i<10;i++){
-let money=document.createElement("div");
-money.innerHTML="💸";
-money.className="money";
-money.style.left=Math.random()*100+"vw";
-document.body.appendChild(money);
-setTimeout(()=>{money.remove();},2000);
+
+for(let i=0;i<15;i++){
+let m=document.createElement("div");
+m.innerHTML="💸";
+m.className="money";
+m.style.left=Math.random()*100+"vw";
+document.body.appendChild(m);
+setTimeout(()=>{m.remove();},2000);
 }
 }
 
 setInterval(function(){
-let status=document.getElementById("status");
-if(status.innerHTML=="ONLINE"){
-status.innerHTML="OFFLINE";
-status.className="offline";
+let st=document.getElementById("status");
+if(st.innerHTML=="ONLINE"){
+st.innerHTML="OFFLINE";
+st.className="offline";
 }else{
-status.innerHTML="ONLINE";
-status.className="online";
+st.innerHTML="ONLINE";
+st.className="online";
 }
-},10000);
+},15000);
 </script>
 
 </body>
