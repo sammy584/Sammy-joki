@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SAMMY STORE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    color:white;
+    text-align:center;
+    background:linear-gradient(-45deg,#000000,#001f3f,#00bfff,#000814);
+    background-size:400% 400%;
+    animation:bgMove 18s ease infinite;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+@keyframes bgMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.logo{
+    font-size:55px;
+    font-weight:bold;
+    margin-top:30px;
+    text-shadow:0 0 10px #00bfff,
+                0 0 30px #00bfff,
+                0 0 60px #00bfff;
+    animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    from{opacity:0.8;}
+    to{opacity:1;}
+}
+
+.status{margin-top:10px;font-weight:bold;}
+.online{color:#00ff00;}
+.offline{color:red;}
+
+.box{
+    background:rgba(0,0,0,0.85);
+    padding:18px;
+    margin:15px auto;
+    width:90%;
+    max-width:380px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,191,255,0.5);
+}
+
+.copy{
+    cursor:pointer;
+    color:#00bfff;
+    font-weight:bold;
+    margin:6px 0;
+}
+
+select,input{
+    width:90%;
+    padding:8px;
+    margin:6px;
+    border-radius:6px;
+    border:none;
+}
+
+.btn{
+    padding:10px;
+    width:90%;
+    background:#00bfff;
+    border:none;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#009acd;
+    box-shadow:0 0 20px #00bfff;
+}
+
+.loading{
+    display:none;
+    color:#00bfff;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+/* NOTIF */
+.success{
+    position:fixed;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#00bfff;
+    color:black;
+    padding:10px 20px;
+    border-radius:10px;
+    display:none;
+    font-weight:bold;
+    z-index:999;
+}
+
+/* MONEY ANIMATION */
+.money{
+    position:fixed;
+    top:-30px;
+    font-size:22px;
+    pointer-events:none;
+    animation:moneyFall 3s linear forwards;
+}
+
+@keyframes moneyFall{
+    from{transform:translateY(0);opacity:1;}
+    to{transform:translateY(100vh);opacity:0;}
+}
+
+</style>
+</head>
+<body>
+
+<div class="logo">SAMMY STORE</div>
+<div class="status" id="statusText"></div>
+
+<div class="box">
+<h3>Pembayaran</h3>
+<div class="copy" onclick="copyText('08811397381')">DANA: 08811397381</div>
+<div class="copy" onclick="copyText('08984356112')">GOPAY: 08984356112</div>
+<div class="copy" onclick="copyText('08984356112')">OVO: 08984356112</div>
+<div class="copy" onclick="alert('QRIS minta aja via WhatsApp')">QRIS: Minta aja</div>
+</div>
+
+<div class="box">
+<h3>Pilih Layanan</h3>
+<select id="layanan">
+<option>Sea 1 - 100 LV (5k)</option>
+<option>Sea 2 - 100 LV (4k)</option>
+<option>Sea 3 - 100 LV (3k)</option>
+<option>Sea 1 - 1jt Belly (7k)</option>
+<option>Sea 2 - 1jt Belly (6k)</option>
+<option>Sea 3 - 1jt Belly (5k)</option>
+</select>
+<input type="text" id="usn" placeholder="Username (USN)">
+<input type="password" id="pw" placeholder="Password (PW)">
+</div>
+
+<div class="box">
+<button class="btn" onclick="orderNow()">Minat? WhatsApp</button>
+<div class="loading" id="loadingText">⏳ Mengirim ke WhatsApp...</div>
+</div>
+
+<div class="success" id="successNotif">✅ Pembayaran Berhasil!</div>
+
+<audio id="clickSound" preload="auto">
+<source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+// STATUS
+let status="online"; // ganti jadi offline kalau tutup
+let statusText=document.getElementById("statusText");
+
+if(status==="online"){
+    statusText.innerHTML="🟢 STATUS: ONLINE";
+    statusText.classList.add("online");
+}else{
+    statusText.innerHTML="🔴 STATUS: OFFLINE";
+    statusText.classList.add("offline");
+}
+
+// SOUND
+function playSound(){
+    let s=document.getElementById("clickSound");
+    s.volume=1.0;
+    s.currentTime=0;
+    s.play().catch(()=>{});
+}
+
+// COPY
+function copyText(text){
+    playSound();
+    navigator.clipboard.writeText(text);
+    showSuccess();
+}
+
+// SUCCESS + MONEY
+function showSuccess(){
+    let notif=document.getElementById("successNotif");
+    notif.style.display="block";
+
+    for(let i=0;i<6;i++){
+        let money=document.createElement("div");
+        money.className="money";
+        money.style.left=Math.random()*100+"vw";
+        money.innerHTML="💸";
+        document.body.appendChild(money);
+        setTimeout(()=>{money.remove();},3000);
+    }
+
+    setTimeout(()=>{notif.style.display="none";},2000);
+}
+
+// ORDER
+function orderNow(){
+
+    if(status==="offline"){
+        alert("Store sedang OFFLINE ❌");
+        return;
+    }
+
+    playSound();
+
+    let layanan=document.getElementById("layanan").value;
+    let usn=document.getElementById("usn").value;
+    let pw=document.getElementById("pw").value;
+
+    if(usn===""||pw===""){
+        alert("Isi Username & Password dulu!");
+        return;
+    }
+
+    document.getElementById("loadingText").style.display="block";
+
+    let nomor="6283107288718";
+
+    let pesan=`Halo SAMMY STORE
+Saya mau order:
+Layanan: ${layanan}
+Username: ${usn}
+Password: ${pw}`;
+
+    let url="https://wa.me/"+nomor+"?text="+encodeURIComponent(pesan);
+
+    setTimeout(function(){
+        window.open(url,"_blank");
+        document.getElementById("loadingText").style.display="none";
+        showSuccess();
+    },1500);
+}
+
+</script>
+
+</body>
+  </html>
