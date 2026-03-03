@@ -1,1 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAMMY JOKI STORE</title>
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{
+background:#000;
+color:#fff;
+overflow-x:hidden;
+}
+
+/* BACKGROUND */
+body::before{
+content:"";
+position:fixed;
+width:200%;
+height:200%;
+background:radial-gradient(circle,#00cfff22,#000 60%);
+animation:bg 15s linear infinite;
+z-index:-1;
+}
+@keyframes bg{
+0%{transform:translate(0,0);}
+50%{transform:translate(-300px,-300px);}
+100%{transform:translate(0,0);}
+}
+
+/* LOGO */
+.logo{
+text-align:center;
+font-size:40px;
+margin:30px;
+color:#7ddfff;
+text-shadow:0 0 20px #00cfff;
+animation:glow 3s infinite alternate;
+}
+@keyframes glow{
+from{text-shadow:0 0 10px #00cfff;}
+to{text-shadow:0 0 30px #00ffff;}
+}
+
+.status{
+text-align:center;
+margin-bottom:20px;
+}
+.online{color:#00ffcc;}
+.offline{color:red;}
+
+.card{
+background:#111;
+margin:20px;
+padding:20px;
+border-radius:15px;
+border:1px solid #00cfff;
+box-shadow:0 0 20px #00cfff55;
+}
+
+select,input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+background:#00cfff;
+color:#000;
+font-weight:bold;
+cursor:pointer;
+}
+button:hover{
+background:#00ffff;
+box-shadow:0 0 15px #00ffff;
+}
+
+.copy{
+background:#000;
+border:1px solid #00cfff;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
+cursor:pointer;
+text-align:center;
+}
+.copy:hover{
+background:#00cfff22;
+}
+
+.loading{
+display:none;
+text-align:center;
+margin-top:10px;
+}
+
+.money{
+position:fixed;
+font-size:30px;
+animation:fall 2s linear forwards;
+}
+@keyframes fall{
+0%{top:-50px;opacity:1;}
+100%{top:100vh;opacity:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="logo">SAMMY JOKI STORE</div>
+
+<div class="status">
+Status: <span id="status" class="online">ONLINE</span>
+</div>
+
+<div class="card">
+<h3>LIST JOKI BLOX FRUIT</h3>
+
+<label>Pilih Layanan</label>
+<select id="layanan">
+<option>Level Sea 1 (5k/100 LV)</option>
+<option>Level Sea 2 (4k/100 LV)</option>
+<option>Level Sea 3 (3k/100 LV)</option>
+<option>Belly Sea 1 (7k/1jt)</option>
+<option>Belly Sea 2 (6k/1jt)</option>
+<option>Belly Sea 3 (5k/1jt)</option>
+</select>
+
+<input type="text" id="user" placeholder="Username">
+<input type="text" id="pass" placeholder="Password">
+
+<button onclick="order()">ORDER SEKARANG</button>
+<div class="loading" id="loading">Mengirim ke WhatsApp...</div>
+</div>
+
+<div class="card">
+<h3>Metode Pembayaran (Klik untuk Copy)</h3>
+
+<div class="copy" onclick="copyText('08811397381')">DANA: 08811397381</div>
+<div class="copy" onclick="copyText('08984356112')">GOPAY: 08984356112</div>
+<div class="copy" onclick="copyText('08984356112')">OVO: 08984356112</div>
+<div class="copy" onclick="alert('QRIS minta ke admin via WhatsApp')">QRIS: Klik untuk info</div>
+
+</div>
+
+<audio id="sound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+
+<script>
+function order(){
+let layanan=document.getElementById("layanan").value;
+let user=document.getElementById("user").value;
+let pass=document.getElementById("pass").value;
+
+if(user==""||pass==""){
+alert("Isi Username dan Password dulu!");
+return;
+}
+
+document.getElementById("loading").style.display="block";
+
+setTimeout(function(){
+window.location.href="https://wa.me/6283107288718?text=Halo%20Admin%0ALayanan:%20"+layanan+"%0AUsername:%20"+user+"%0APassword:%20"+pass;
+},2000);
+}
+
+function copyText(text){
+navigator.clipboard.writeText(text);
+alert("Nomor berhasil disalin!");
+}
+
+setInterval(function(){
+let st=document.getElementById("status");
+if(st.innerHTML=="ONLINE"){
+st.innerHTML="OFFLINE";
+st.className="offline";
+}else{
+st.innerHTML="ONLINE";
+st.className="online";
+}
+},15000);
+</script>
+
+</body>
+                                 </html>
