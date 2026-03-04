@@ -8,66 +8,46 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{
-background:#000;
+background:#0a0f1c;
 color:#fff;
-overflow-x:hidden;
-}
-
-body::before{
-content:"";
-position:fixed;
-width:200%;
-height:200%;
-background:radial-gradient(circle,#00cfff22,#000 60%);
-animation:bg 15s linear infinite;
-z-index:-1;
-}
-@keyframes bg{
-0%{transform:translate(0,0);}
-50%{transform:translate(-300px,-300px);}
-100%{transform:translate(0,0);}
 }
 
 .logo{
 text-align:center;
-font-size:40px;
-margin:30px;
-color:#7ddfff;
-text-shadow:0 0 20px #00cfff;
-animation:glow 3s infinite alternate;
-}
-@keyframes glow{
-from{text-shadow:0 0 10px #00cfff;}
-to{text-shadow:0 0 30px #00ffff;}
+font-size:38px;
+margin:30px 0;
+color:#00e0ff;
+text-shadow:0 0 20px #00e0ff;
 }
 
 .card{
-background:#111;
+background:#111827;
 margin:20px;
 padding:20px;
-border-radius:15px;
-border:1px solid #00cfff;
-box-shadow:0 0 20px #00cfff55;
+border-radius:16px;
+box-shadow:0 0 20px #00e0ff33;
 }
 
 select,input{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:10px;
-border-radius:8px;
+border-radius:10px;
 border:none;
+outline:none;
 }
 
 button{
 width:100%;
 padding:12px;
-margin-top:10px;
+margin-top:12px;
 border:none;
-border-radius:10px;
-background:#00cfff;
+border-radius:12px;
+background:#00e0ff;
 color:#000;
 font-weight:bold;
 cursor:pointer;
+transition:0.3s;
 }
 button:hover{
 background:#00ffff;
@@ -75,29 +55,25 @@ box-shadow:0 0 15px #00ffff;
 }
 
 .copy{
-background:#000;
-border:1px solid #00cfff;
+background:#0a0f1c;
+border:1px solid #00e0ff;
 padding:10px;
 margin-top:8px;
-border-radius:8px;
-cursor:pointer;
+border-radius:10px;
 text-align:center;
+cursor:pointer;
 }
 .copy:hover{
-background:#00cfff22;
-}
-
-.loading{
-display:none;
-text-align:center;
-margin-top:10px;
+background:#00e0ff22;
 }
 
 #preview{
-width:100%;
-margin-top:10px;
 display:none;
-border-radius:10px;
+width:100%;
+margin-top:15px;
+border-radius:12px;
+box-shadow:0 0 15px #00e0ff55;
+cursor:pointer;
 }
 </style>
 </head>
@@ -106,46 +82,43 @@ border-radius:10px;
 <div class="logo">SAMMY JOKI STORE</div>
 
 <div class="card">
-<h3>LIST JOKI BLOX FRUIT</h3>
+<h3>ORDER JOKI BLOX FRUIT</h3>
 
 <select id="layanan">
-<option>Level Sea 1 (5k/100 LV)</option>
-<option>Level Sea 2 (4k/100 LV)</option>
-<option>Level Sea 3 (3k/100 LV)</option>
-<option>Belly Sea 1 (7k/1jt)</option>
-<option>Belly Sea 2 (6k/1jt)</option>
-<option>Belly Sea 3 (5k/1jt)</option>
+<option>Level Sea 1</option>
+<option>Level Sea 2</option>
+<option>Level Sea 3</option>
+<option>Belly Farm</option>
 </select>
 
-<input type="text" id="user" placeholder="Username">
-<input type="text" id="pass" placeholder="Password">
+<input type="text" id="user" placeholder="Username Game">
 
 <button onclick="order()">ORDER SEKARANG</button>
-<div class="loading" id="loading">Mengirim ke WhatsApp...</div>
 </div>
 
 <div class="card">
-<h3>Metode Pembayaran</h3>
+<h3>METODE PEMBAYARAN</h3>
 
 <div class="copy" onclick="copyText('08811397381')">DANA: 08811397381</div>
 <div class="copy" onclick="copyText('08984356112')">GOPAY: 08984356112</div>
 <div class="copy" onclick="copyText('08984356112')">OVO: 08984356112</div>
 
-<hr style="margin:15px 0;border:1px solid #00cfff33;">
+<hr style="margin:15px 0;border:1px solid #00e0ff33;">
 
 <h4 style="text-align:center;">QRIS ALL PAYMENT</h4>
 
 <img src="https://raw.githubusercontent.com/sammy584/sammy-joki/main/qris.png"
-style="width:220px;display:block;margin:15px auto;border-radius:12px;border:2px solid #00cfff;box-shadow:0 0 20px #00cfff55;">
+style="width:220px;display:block;margin:15px auto;border-radius:12px;border:2px solid #00e0ff;box-shadow:0 0 20px #00e0ff55;">
 
 <p style="text-align:center;font-size:13px;color:#aaa;">
 Scan QRIS lalu upload bukti transfer
 </p>
 
-<input type="file" id="bukti" accept="image/*" onchange="previewBukti()">
-<img id="preview">
+<input type="file" id="bukti" accept="image/*">
 
-<button onclick="kirimBukti()">Kirim Bukti ke WhatsApp</button>
+<img id="preview" onclick="besarGambar()">
+
+<button onclick="kirimWA()">Kirim Bukti ke WhatsApp</button>
 
 </div>
 
@@ -153,18 +126,13 @@ Scan QRIS lalu upload bukti transfer
 function order(){
 let layanan=document.getElementById("layanan").value;
 let user=document.getElementById("user").value;
-let pass=document.getElementById("pass").value;
 
-if(user==""||pass==""){
-alert("Isi Username dan Password dulu!");
+if(user==""){
+alert("Isi Username dulu!");
 return;
 }
 
-document.getElementById("loading").style.display="block";
-
-setTimeout(function(){
-window.location.href="https://wa.me/6283107288718?text=Halo%20Admin%0ALayanan:%20"+layanan+"%0AUsername:%20"+user+"%0APassword:%20"+pass;
-},2000);
+window.open("https://wa.me/6283107288718?text=Halo%20Admin%0ALayanan:%20"+layanan+"%0AUsername:%20"+user);
 }
 
 function copyText(text){
@@ -172,19 +140,33 @@ navigator.clipboard.writeText(text);
 alert("Nomor berhasil disalin!");
 }
 
-function previewBukti(){
-let file=document.getElementById("bukti").files[0];
+let fileInput=document.getElementById("bukti");
+let preview=document.getElementById("preview");
+
+fileInput.addEventListener("change",function(){
+let file=this.files[0];
+if(file){
 let reader=new FileReader();
 reader.onload=function(e){
-let img=document.getElementById("preview");
-img.src=e.target.result;
-img.style.display="block";
+preview.src=e.target.result;
+preview.style.display="block";
 }
-if(file){ reader.readAsDataURL(file); }
+reader.readAsDataURL(file);
+}
+});
+
+function besarGambar(){
+if(preview.style.width=="100%"){
+preview.style.width="220px";
+preview.style.margin="15px auto";
+preview.style.display="block";
+}else{
+preview.style.width="100%";
+}
 }
 
-function kirimBukti(){
-window.open("https://wa.me/6283107288718?text=Halo%20Admin%20Saya%20Sudah%20Transfer%20Dan%20Upload%20Bukti");
+function kirimWA(){
+window.open("https://wa.me/6283107288718?text=Halo%20Admin%20Saya%20Sudah%20Transfer%20QRIS.%20Berikut%20Bukti%20Transfer%20Saya");
 }
 </script>
 
