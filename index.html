@@ -13,7 +13,6 @@ color:#fff;
 overflow-x:hidden;
 }
 
-/* BACKGROUND */
 body::before{
 content:"";
 position:fixed;
@@ -29,7 +28,6 @@ z-index:-1;
 100%{transform:translate(0,0);}
 }
 
-/* LOGO */
 .logo{
 text-align:center;
 font-size:40px;
@@ -42,13 +40,6 @@ animation:glow 3s infinite alternate;
 from{text-shadow:0 0 10px #00cfff;}
 to{text-shadow:0 0 30px #00ffff;}
 }
-
-.status{
-text-align:center;
-margin-bottom:20px;
-}
-.online{color:#00ffcc;}
-.offline{color:red;}
 
 .card{
 background:#111;
@@ -102,14 +93,11 @@ text-align:center;
 margin-top:10px;
 }
 
-.money{
-position:fixed;
-font-size:30px;
-animation:fall 2s linear forwards;
-}
-@keyframes fall{
-0%{top:-50px;opacity:1;}
-100%{top:100vh;opacity:0;}
+#preview{
+width:100%;
+margin-top:10px;
+display:none;
+border-radius:10px;
 }
 </style>
 </head>
@@ -117,14 +105,9 @@ animation:fall 2s linear forwards;
 
 <div class="logo">SAMMY JOKI STORE</div>
 
-<div class="status">
-Status: <span id="status" class="online">ONLINE</span>
-</div>
-
 <div class="card">
 <h3>LIST JOKI BLOX FRUIT</h3>
 
-<label>Pilih Layanan</label>
 <select id="layanan">
 <option>Level Sea 1 (5k/100 LV)</option>
 <option>Level Sea 2 (4k/100 LV)</option>
@@ -142,16 +125,29 @@ Status: <span id="status" class="online">ONLINE</span>
 </div>
 
 <div class="card">
-<h3>Metode Pembayaran (Klik untuk Copy)</h3>
+<h3>Metode Pembayaran</h3>
 
 <div class="copy" onclick="copyText('08811397381')">DANA: 08811397381</div>
 <div class="copy" onclick="copyText('08984356112')">GOPAY: 08984356112</div>
 <div class="copy" onclick="copyText('08984356112')">OVO: 08984356112</div>
-<div class="copy" onclick="alert('QRIS minta ke admin via WhatsApp')">QRIS: Klik untuk info</div>
+
+<hr style="margin:15px 0;border:1px solid #00cfff33;">
+
+<h4 style="text-align:center;">QRIS ALL PAYMENT</h4>
+
+<img src="https://raw.githubusercontent.com/sammy584/sammy-joki/main/qris.png"
+style="width:220px;display:block;margin:15px auto;border-radius:12px;border:2px solid #00cfff;box-shadow:0 0 20px #00cfff55;">
+
+<p style="text-align:center;font-size:13px;color:#aaa;">
+Scan QRIS lalu upload bukti transfer
+</p>
+
+<input type="file" id="bukti" accept="image/*" onchange="previewBukti()">
+<img id="preview">
+
+<button onclick="kirimBukti()">Kirim Bukti ke WhatsApp</button>
 
 </div>
-
-<audio id="sound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
 <script>
 function order(){
@@ -176,17 +172,21 @@ navigator.clipboard.writeText(text);
 alert("Nomor berhasil disalin!");
 }
 
-setInterval(function(){
-let st=document.getElementById("status");
-if(st.innerHTML=="ONLINE"){
-st.innerHTML="OFFLINE";
-st.className="offline";
-}else{
-st.innerHTML="ONLINE";
-st.className="online";
+function previewBukti(){
+let file=document.getElementById("bukti").files[0];
+let reader=new FileReader();
+reader.onload=function(e){
+let img=document.getElementById("preview");
+img.src=e.target.result;
+img.style.display="block";
 }
-},15000);
+if(file){ reader.readAsDataURL(file); }
+}
+
+function kirimBukti(){
+window.open("https://wa.me/6283107288718?text=Halo%20Admin%20Saya%20Sudah%20Transfer%20Dan%20Upload%20Bukti");
+}
 </script>
 
 </body>
-                                 </html>
+</html>
